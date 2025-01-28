@@ -28,7 +28,24 @@ app.geometry("700x700")
 app.title("Pokedex's Bizarre Adventure")
 app.resizable(width=False, height=False)
 
-button = ctk.CTkButton(app, text="The Button™", fg_color=Button)
-button.pack()
+displayScreen = Tk()
 
+def FindFire():
+    print (fileread.loc[fileread['Type 1'] == "Fire"])
+    filteredData =
+
+def FindGrass():
+    print (fileread.loc[fileread['Type 1'] == "Grass"])
+
+#first button
+button = ctk.CTkButton(app, text="Show Fire Type", fg_color=Button, command = FindFire)
+button.place(x=280, y=42)
+
+button = ctk.CTkButton(app, text="Show Grass Type", fg_color=Button, command = FindGrass)
+button.place(x=280, y=82)
+
+#second button
+#button2 = ctk.CTkButton(app, text="The Button 2™", fg_color=Button2)
+#button2.place(x=70, y=70)
 app.mainloop()
+
