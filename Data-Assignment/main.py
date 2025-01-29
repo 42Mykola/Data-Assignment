@@ -19,7 +19,7 @@ searchpokemon = "Type"
 fileread = pd.read_csv('pokemon_data.csv')
 
 #colours for tkinter
-Ebony = "#595A4A"             # #D0CFCF - Timberwolf  #595A4A - Ebony  #F6F7EB - Ivory  #331832 - Dark Purple  #A30015 - Carmine
+Ebony = "#595A4A"
 Timberwolf = "#D0CFCF"
 Carmine = "#A30015"
 DarkPurple = "#331832"
@@ -34,6 +34,13 @@ app.resizable(width=False, height=False)
 
 
 #Search Bar
+
+def on_button_click(name, type1, type2,
+                    hp, atk, defense,
+                   spAtk, spDef, spd, gen, leg):
+    print(name, type1, type2,
+                                   hp, atk, defense,
+                                   spAtk, spDef, spd, gen, leg)
 
 
 def remove_pokemon_():
@@ -66,7 +73,7 @@ def search_call():
         leg = row["Legendary"]
 
         button = ctk.CTkButton(frameButtons,
-                               corner_radius=20, text=name, width=300, text_color="white", fg_color= Carmine,
+                               corner_radius=20, text=name, width=300, text_color="white", fg_color= Carmine, hover_color= DarkPurple,
                                command=lambda
                                    name=name,
                                    type1=type1,
@@ -83,7 +90,7 @@ def search_call():
                                    name, type1, type2,
                                    hp, atk, defense,
                                    spAtk, spDef, spd, gen, leg))
-        button.pack(pady=5)
+        button.pack(pady=5,anchor="w")
 
 #Fream for a search button, it fills the whole of x axis.
 searchFrame = ctk.CTkFrame(app, fg_color=Timberwolf)
@@ -93,11 +100,11 @@ searchFrame.pack(fill="x")
 #Search bar itself
 searchBar = ctk.CTkEntry(searchFrame, width= 500, fg_color= Ivory)
 searchBar.pack(side= "left", padx= 5)
-searchButton = ctk.CTkButton(searchFrame, command=search_call, fg_color= Carmine, text="Search")
+searchButton = ctk.CTkButton(searchFrame, command=search_call, fg_color= Carmine, text="Search", hover_color= DarkPurple,)
 searchButton.pack(side="right")
 
 frameButtons = ctk.CTkScrollableFrame(app)
-frameButtons.pack(expand =True, fill="both")
+frameButtons.pack(expand =True, fill="both", side="left")
 
 
 #second button
