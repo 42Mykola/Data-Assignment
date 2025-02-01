@@ -33,21 +33,39 @@ app.title("Pokedex's Bizarre Adventure")
 app.resizable(width=False, height=False)
 
 
-#Search Bar
 
+#defining on button click option
+resultStat = 0
 def on_button_click(name, type1, type2,
                     hp, atk, defense,
                    spAtk, spDef, spd, gen, leg):
-    print(name, type1, type2,
-                                   hp, atk, defense,
-                                   spAtk, spDef, spd, gen, leg)
+    resultStat = name, type1, type2, hp, atk, defense, spAtk, spDef, spd, gen, leg
+    print(resultStat)
+
+    #Clears the details Frame widget for new stats to be set
+    detailsFrame.delete("1.0", "end")
+
+    #Inserts the stats of the pokemon that has been clicked on into the detailsFrame
+    detailsFrame.insert("1.0",
+                        f"Name: {name}"
+                        f"\nType 1: {type1}"
+                        f"\nType 2: {type2}"
+                        f"\nHP: {hp}"
+                        f"\nAttack: {atk}"
+                        f"\nDefense: {defense}"
+                        f"\nSp. Atk: {spAtk}"
+                        f"\nSp. Def: {spDef}"
+                        f"\nSpeed: {spd}"
+                        f"\nGeneration: {gen}"
+                        f"\nLegendary: {leg}")
 
 
+#Defining the function for erasing the widgets when I need it
 def remove_pokemon_():
     for widget in frameButtons.winfo_children():
         widget.destroy()
 
-
+#Search bar functions and allat
 def search_call():
     query = searchBar.get().strip().lower()
     filteredData=fileread[
@@ -60,8 +78,8 @@ def search_call():
     for index, row in filteredData.iterrows():
         name = row["Name"]
         type1 = row["Type 1"]
-        # row.get is used because some pokemon do not have a second type
-        # and python doesn't like it if you use row[] and nothing appears
+        # row.get is used because some pokemon don't have a second type to them
+        # and python refuses to work if you use row function and nothing appears
         type2 = row.get("Type 2", None)
         hp = row["HP"]
         atk = row["Attack"]
@@ -72,8 +90,11 @@ def search_call():
         gen = row["Generation"]
         leg = row["Legendary"]
 
+        #Function for buttons that appear in response to type that has been searched
         button = ctk.CTkButton(frameButtons,
-                               corner_radius=20, text=name, width=300, text_color="white", fg_color= Carmine, hover_color= DarkPurple,
+                               corner_radius=20, text=name, width=300,
+                               text_color="white", fg_color= Carmine,
+                               hover_color= DarkPurple,
                                command=lambda
                                    name=name,
                                    type1=type1,
@@ -92,17 +113,25 @@ def search_call():
                                    spAtk, spDef, spd, gen, leg))
         button.pack(pady=5,anchor="w")
 
-#Fream for a search button, it fills the whole of x axis.
+#Frame for a search button, it fills the whole of x axis.
 searchFrame = ctk.CTkFrame(app, fg_color=Timberwolf)
 searchFrame.pack(fill="x")
 
+#Frame for displaying Pokemon stats.
+detailsFrame = ctk.CTkTextbox(app)
+pokemonDetails = detailsFrame.insert("0.0", "Pokemon Details")
+detailsFrame.pack(side="right", fill="y")
 
-#Search bar itself
-searchBar = ctk.CTkEntry(searchFrame, width= 500, fg_color= Ivory)
+#Search bar frames
+searchBar = ctk.CTkEntry(searchFrame, width= 500, fg_color= Ebony)
 searchBar.pack(side= "left", padx= 5)
-searchButton = ctk.CTkButton(searchFrame, command=search_call, fg_color= Carmine, text="Search", hover_color= DarkPurple,)
+searchButton = ctk.CTkButton(searchFrame,
+                             command=search_call,
+                             fg_color= Carmine, text="Search",
+                             hover_color= DarkPurple,)
 searchButton.pack(side="right")
 
+#Buttons of Pokemons that pop up when type is searched for.
 frameButtons = ctk.CTkScrollableFrame(app)
 frameButtons.pack(expand =True, fill="both", side="left")
 
