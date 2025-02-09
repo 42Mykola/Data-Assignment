@@ -34,10 +34,6 @@ app.title("Pokedex's Bizarre Adventure")
 app.resizable(width=False, height=False)
 
 
-#defining on button click option
-resultStat = 0
-
-
 #Defining graph generation
 def generate_type_graph():
     #Counting the number of Pokemon for each type is happening here. Function "value_counts()" counts each
@@ -80,14 +76,14 @@ def generate_type_graph():
     plt.tight_layout()
     plt.show()
 
+
 def on_button_click(name, type1, type2,
                     hp, atk, defense,
-                   spAtk, spDef, spd, gen, leg):
-
-    #Clears the details Frame widget for new stats to be set
+                    spAtk, spDef, spd, gen, leg):
+    # Clears the details Frame widget for new stats to be set
     detailsFrame.delete("1.0", "end")
 
-    #Inserts the stats of the pokemon that has been clicked on into the detailsFrame
+    # Inserts the stats of the pokemon that has been clicked on into the detailsFrame
     detailsFrame.insert("1.0",
                         f"Name: {name}"
                         f"\nType 1: {type1}"
@@ -214,11 +210,11 @@ graphButton = ctk.CTkButton(functionFrame,
 graphButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
 #Diamond graph settings.
-DiamondButton = ctk.CTkButton(functionFrame,
+SpiderButton = ctk.CTkButton(functionFrame,
                             fg_color=Carmine,
                             hover_color=DarkPurple,
-                            text="Diamond Graph")
-DiamondButton.pack(side = "left", expand = True, padx = 5, pady = 5)
+                            text="Spider Graph")
+SpiderButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
 #Random Pokemon function settings.
 randomPokemonButton = ctk.CTkButton(functionFrame,
