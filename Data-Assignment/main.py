@@ -102,16 +102,57 @@ def on_button_click(name, type1, type2,
                         f"\nLegendary: {leg}")
 
 
+
 #Defining the function for erasing the widgets when I need it
 def remove_pokemon_():
     for widget in frameButtons.winfo_children():
         widget.destroy()
 
+
+def random_search_call():
+    #Select a sample of random Pokemon from the dataset
+    random_pokemon = fileread.sample(n=1).iloc[0]  # Randomly select one row
+
+    #Attributes of randomly selected
+    name = random_pokemon["Name"]
+    type1 = random_pokemon["Type 1"]
+    type2 = random_pokemon.get("Type 2", None)  # Use .get() to cover the missing Type
+    hp = random_pokemon["HP"]
+    atk = random_pokemon["Attack"]
+    defense = random_pokemon["Defense"]
+    spAtk = random_pokemon["Sp. Atk"]
+    spDef = random_pokemon["Sp. Def"]
+    spd = random_pokemon["Speed"]
+    gen = random_pokemon["Generation"]
+    leg = random_pokemon["Legendary"]
+
+    #Clear previous Pokemon data
+    remove_pokemon_()
+
+    #Clears the details Frame widget for new stats to be set
+    detailsFrame.delete("1.0", "end")
+
+    #Inserts the stats of the Pokemon that has been chosen
+    detailsFrame.insert("1.0",
+                        f"Name: {name}"
+                        f"\nType 1: {type1}"
+                        f"\nType 2: {type2}"
+                        f"\nHP: {hp}"
+                        f"\nAttack: {atk}"
+                        f"\nDefense: {defense}"
+                        f"\nSp. Atk: {spAtk}"
+                        f"\nSp. Def: {spDef}"
+                        f"\nSpeed: {spd}"
+                        f"\nGeneration: {gen}"
+                        f"\nLegendary: {leg}")
+
+
 #Search bar functions and creation of buttons that corresponds to the pokemon
 def search_call():
     query = searchBar.get().strip().lower()
     filteredData=fileread[
-                fileread['Type 1'].str.lower().str.contains(query) |
+                fileread['Name'].str.lower().str.contains(query)|
+                fileread['Type 1'].str.lower().str.contains(query)|
                 fileread['Type 2'].str.lower().str.contains(query)
                 ]
     filteredData = filteredData.drop_duplicates(subset=
@@ -163,27 +204,36 @@ searchFrame.pack(fill="x")
 functionFrame = ctk.CTkFrame(searchFrame)
 functionFrame.pack(fill="x")
 
-#Graph buttons
+
+#Bar graph settings.
 graphButton = ctk.CTkButton(functionFrame,
                             command=generate_type_graph,
                             fg_color=Carmine,
                             hover_color=DarkPurple,
                             text="Graph")
 graphButton.pack(side = "left", expand = True, padx = 5, pady = 5)
+
+#Diamond graph settings.
 DiamondButton = ctk.CTkButton(functionFrame,
                             fg_color=Carmine,
                             hover_color=DarkPurple,
                             text="Diamond Graph")
 DiamondButton.pack(side = "left", expand = True, padx = 5, pady = 5)
+
+#Random Pokemon function settings.
 randomPokemonButton = ctk.CTkButton(functionFrame,
+                            command = random_search_call,
                             fg_color=Carmine,
                             hover_color=DarkPurple,
                             text="Random Pokemon")
 randomPokemonButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
+
 #Frame for displaying Pokemon stats.
 detailsFrame = ctk.CTkTextbox(app)
-pokemonDetails = detailsFrame.insert("0.0", "Pokemon Details")
+pokemonDetails = detailsFrame.insert("0.0", "Search by typing in the name \nof the Pokemon or it's type!")
+
+
 detailsFrame.pack(side="right", fill="y")
 
 #Search bar frames
