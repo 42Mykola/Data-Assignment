@@ -34,6 +34,48 @@ app.title("Pokedex's Bizarre Adventure")
 app.resizable(width=False, height=False)
 
 
+#Function to generate a quest
+def generate_quest():
+    questBox.pack()
+    questEntry.pack()
+    checkButton.pack()
+
+    #Randomly select a Pokémon
+    random_pokemon = fileread.sample(n=1).iloc[0]
+    name = random_pokemon["Name"]
+
+    #Randomly select an attribute
+    attributes = ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']
+    selected_attribute = np.random.choice(attributes)
+
+    #Get the correct value for the selected attribute
+    correct_value = random_pokemon[selected_attribute]
+
+    # Display the quest in the detailsFrame
+    questBox.delete("1.0", "end")
+    questBox.insert("1.0", f"Quest: What is the {selected_attribute} of \n{name}?\n\nEnter your answer below:")
+
+    # Store the correct value and Pokémon name for later comparison
+    app.correct_value = correct_value
+    app.quest_pokemon = name
+    app.selected_attribute = selected_attribute
+
+#Function for checking an answer
+def check_answer():
+        user_answer = questEntry.get().strip()
+        try:
+            user_answer = int(user_answer)  # Convert input to integer
+            if user_answer == app.correct_value:
+                questBox.insert("end",
+                                    f"\n\nCorrect! The {app.selected_attribute} of \n{app.quest_pokemon} is {app.correct_value}.")
+            else:
+                questBox.insert("end",
+                                    f"\n\nIncorrect! The {app.selected_attribute} of \n{app.quest_pokemon} is {app.correct_value}.")
+        except ValueError:
+            questBox.insert("end", "\n\nPlease enter a valid number.")
+
+
+
 #Defining graph generation
 def generate_type_graph():
     #Counting the number of Pokemon for each type is happening here. Function "value_counts()" counts each
@@ -81,10 +123,10 @@ def on_button_click(name, type1, type2,
                     hp, atk, defense,
                     spAtk, spDef, spd, gen, leg):
     # Clears the details Frame widget for new stats to be set
-    detailsFrame.delete("1.0", "end")
+    detailsBox.delete("1.0", "end")
 
     # Inserts the stats of the pokemon that has been clicked on into the detailsFrame
-    detailsFrame.insert("1.0",
+    detailsBox.insert("1.0",
                         f"Name: {name}"
                         f"\nType 1: {type1}"
                         f"\nType 2: {type2}"
@@ -126,10 +168,10 @@ def random_search_call():
     remove_pokemon_()
 
     #Clears the details Frame widget for new stats to be set
-    detailsFrame.delete("1.0", "end")
+    detailsBox.delete("1.0", "end")
 
     #Inserts the stats of the Pokemon that has been chosen
-    detailsFrame.insert("1.0",
+    detailsBox.insert("1.0",
                         f"Name: {name}"
                         f"\nType 1: {type1}"
                         f"\nType 2: {type2}"
@@ -209,12 +251,13 @@ graphButton = ctk.CTkButton(functionFrame,
                             text="Graph")
 graphButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
-#Diamond graph settings.
-SpiderButton = ctk.CTkButton(functionFrame,
+#Quest button.
+questButton = ctk.CTkButton(functionFrame,
+                            command = generate_quest,
                             fg_color=Carmine,
                             hover_color=DarkPurple,
-                            text="Spider Graph")
-SpiderButton.pack(side = "left", expand = True, padx = 5, pady = 5)
+                            text="Quest")
+questButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
 #Random Pokemon function settings.
 randomPokemonButton = ctk.CTkButton(functionFrame,
@@ -226,11 +269,28 @@ randomPokemonButton.pack(side = "left", expand = True, padx = 5, pady = 5)
 
 
 #Frame for displaying Pokemon stats.
-detailsFrame = ctk.CTkTextbox(app)
-pokemonDetails = detailsFrame.insert("0.0", "Search by typing in the name \nof the Pokemon or it's type!")
-
-
+detailsFrame = ctk.CTkFrame(app)
 detailsFrame.pack(side="right", fill="y")
+
+#Box for displaying pokemon stats.
+detailsBox=ctk.CTkTextbox(detailsFrame)
+pokemonDetails = detailsBox.insert("0.0", "Search by typing in the name \nof the Pokemon or it's type!")
+detailsBox.pack()
+
+
+questBox = ctk.CTkTextbox(detailsFrame)
+questDetails = questBox.insert(0.0, text="")
+
+
+questEntry = ctk.CTkEntry(detailsFrame)
+
+checkButton=ctk.CTkButton(detailsFrame,
+                           command=check_answer,
+                           fg_color=Carmine,
+                           hover_color=DarkPurple,
+                           text="Check")
+
+
 
 #Search bar frames
 searchBar = ctk.CTkEntry(searchFrame, width= 500, fg_color= Ebony)
@@ -252,5 +312,5 @@ frameButtons.pack(expand =True, fill="both", side="left")
 #second button
 #button2 = ctk.CTkButton(app, text="The Button 2™", fg_color=Button2)
 #button2.place(x=70, y=70)
+search_call()
 app.mainloop()
-
